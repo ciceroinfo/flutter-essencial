@@ -1,6 +1,10 @@
+import 'package:aula01_app/pages/hello_listview.dart';
 import 'package:aula01_app/pages/hello_page1.dart';
 import 'package:aula01_app/pages/hello_page2.dart';
 import 'package:aula01_app/pages/hello_page3.dart';
+import 'package:aula01_app/utils/nav.dart';
+import 'package:aula01_app/utils/util.dart';
+import 'package:aula01_app/widgets/dafault_button.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -52,7 +56,7 @@ class HomePage extends StatelessWidget {
         Widget>[
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
         _button(context, "ListView",
-            () => _onClickNavigation(context, HelloPage1())),
+            () => _onClickNavigation(context, HelloListView())),
         _button(
             context, "Page 2", () => _onClickNavigation(context, HelloPage2())),
         _button(
@@ -66,11 +70,12 @@ class HomePage extends StatelessWidget {
     ]);
   }
 
-  void _onClickNavigation(BuildContext context, Widget page) {
+  void _onClickNavigation(BuildContext context, Widget page) async {
     print("Clicked on {$page}");
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-      return page;
-    }));
+
+    String retorno = await push(context, page);
+
+    print("retorno: '$retorno'");
   }
 
   _onClickToast() {}
@@ -80,13 +85,7 @@ class HomePage extends StatelessWidget {
   _onClickSnack() {}
 
   _button(BuildContext context, String text, Function onPressed) {
-    return RaisedButton(
-        color: Colors.white,
-        child: Text(
-          text,
-          style: TextStyle(color: colorConvert("#e60935")),
-        ),
-        onPressed: onPressed);
+    return DefaultButton(text, onPressed: onPressed);
   }
 
   _img(String img) {
@@ -111,16 +110,5 @@ class HomePage extends StatelessWidget {
         decorationStyle: TextDecorationStyle.wavy,
       ),
     );
-  }
-
-  Color colorConvert(String color) {
-    color = color.replaceAll("#", "");
-    if (color.length == 6) {
-      return Color(int.parse("0xFF" + color));
-    } else if (color.length == 8) {
-      return Color(int.parse("0x" + color));
-    }
-
-    return Colors.grey;
   }
 }
