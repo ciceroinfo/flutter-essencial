@@ -16,9 +16,24 @@ class HomePage extends StatelessWidget {
     return Container(
       color: Colors.white,
       child: Center(
-        child: _img(),
+        child: _button(),
       ),
     );
+  }
+
+  _button() {
+    return RaisedButton(
+        color: colorConvert("#e60935"),
+        child: Text(
+          "OK",
+          style: TextStyle(color: Colors.white),
+        ),
+        onPressed: () => _onClickOK()
+    );
+  }
+
+  void _onClickOK() {
+    print("Clicou aqui");
   }
 
   _img() {
@@ -43,5 +58,16 @@ class HomePage extends StatelessWidget {
         decorationStyle: TextDecorationStyle.wavy,
       ),
     );
+  }
+
+  Color colorConvert(String color) {
+    color = color.replaceAll("#", "");
+    if (color.length == 6) {
+      return Color(int.parse("0xFF" + color));
+    } else if (color.length == 8) {
+      return Color(int.parse("0x" + color));
+    }
+
+    return Colors.grey;
   }
 }
