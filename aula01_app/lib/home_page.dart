@@ -38,7 +38,7 @@ class HomePage extends StatelessWidget {
 
   Container _pageView() {
     return Container(
-      height: 300,
+      height: 301,
       child: PageView(
         children: [
           _img("assets/images/dog1.png"),
