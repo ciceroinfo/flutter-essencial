@@ -31,7 +31,11 @@ class HomePage extends StatelessWidget {
       color: colorConvert("#cb0930"),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[_text(), _pageView(), _buttons(context)],
+        children: <Widget>[
+          _text(),
+          _pageView(),
+          _buttons(),
+        ],
       ),
     );
   }
@@ -51,23 +55,29 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Column _buttons(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: <
-        Widget>[
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
-        _button(context, "ListView",
-            () => _onClickNavigation(context, HelloListView())),
-        _button(
-            context, "Page 2", () => _onClickNavigation(context, HelloPage2())),
-        _button(
-            context, "Page 3", () => _onClickNavigation(context, HelloPage3())),
-      ]),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
-        _button(context, "Snack", _onClickSnack),
-        _button(context, "Dialog", _onClickDialog),
-        _button(context, "Toast", _onClickToast)
-      ])
-    ]);
+  _buttons() {
+    return Builder(builder: (context) {
+      return Column(mainAxisAlignment: MainAxisAlignment.center, children: <
+          Widget>[
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              _button(context, "ListView",
+                  onPressed: () =>
+                      _onClickNavigation(context, HelloListView())),
+              _button(context, "Page 2",
+                  onPressed: () => _onClickNavigation(context, HelloPage2())),
+              _button(context, "Page 3",
+                  onPressed: () => _onClickNavigation(context, HelloPage3())),
+            ]),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
+            Widget>[
+          _button(context, "Snack", onPressed: () => _onClickSnack(context)),
+          _button(context, "Dialog", onPressed: () => _onClickDialog(context)),
+          _button(context, "Toast", onPressed: _onClickToast)
+        ])
+      ]);
+    });
   }
 
   void _onClickNavigation(BuildContext context, Widget page) async {
@@ -80,11 +90,47 @@ class HomePage extends StatelessWidget {
 
   _onClickToast() {}
 
-  _onClickDialog() {}
+  _onClickDialog(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: AlertDialog(
+              title: Text("Dialog Flutter"),
+              actions: [
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Cancelar")),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      print("OK Dialog button");
+                    },
+                    child: Text("OK")),
+              ],
+            ),
+          );
+        });
+  }
 
-  _onClickSnack() {}
+  _onClickSnack(context) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Olá Snack"),
+      action: SnackBarAction(
+        textColor: Colors.yellow,
+        label: "OK",
+        onPressed: () {
+          print("OK Snack");
+        },
+      ),
+    ));
+  }
 
-  _button(BuildContext context, String text, Function onPressed) {
+  _button(BuildContext context, String text, {@required Function onPressed}) {
     return DefaultButton(text, onPressed: onPressed);
   }
 

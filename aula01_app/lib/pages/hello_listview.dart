@@ -1,3 +1,5 @@
+import 'package:aula01_app/pages/dog_page.dart';
+import 'package:aula01_app/utils/nav.dart';
 import 'package:aula01_app/widgets/dafault_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -76,27 +78,33 @@ class _HelloListViewState extends State<HelloListView> {
     }
   }
 
-  Stack _itemView(List<Dog> dogs, int index) {
+  _itemView(List<Dog> dogs, int index) {
     Dog dog = dogs[index];
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        _img(dog.foto),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Container(
-            margin: EdgeInsets.all(12),
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                color: Colors.black38, borderRadius: BorderRadius.circular(16)),
-            child: Text(
-              dog.nome,
-              style: TextStyle(fontSize: 26, color: Colors.white),
+    return GestureDetector(
+      onTap: () {
+        push(context, DogPage(dog));
+      },
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          _img(dog.foto),
+          Container(
+            alignment: Alignment.topLeft,
+            child: Container(
+              margin: EdgeInsets.all(12),
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  color: Colors.black38,
+                  borderRadius: BorderRadius.circular(16)),
+              child: Text(
+                dog.nome,
+                style: TextStyle(fontSize: 26, color: Colors.white),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
