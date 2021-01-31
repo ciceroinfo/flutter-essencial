@@ -1,3 +1,4 @@
+import 'package:aula01_app/drawer_list.dart';
 import 'package:aula01_app/pages/hello_listview.dart';
 import 'package:aula01_app/pages/hello_page1.dart';
 import 'package:aula01_app/pages/hello_page2.dart';
@@ -6,6 +7,7 @@ import 'package:aula01_app/utils/nav.dart';
 import 'package:aula01_app/utils/util.dart';
 import 'package:aula01_app/widgets/dafault_button.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -16,6 +18,13 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
       ),
       body: _body(context),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          _onClickFab();
+        },
+      ),
+      drawer: DrawerList(),
     );
   }
 
@@ -28,9 +37,10 @@ class HomePage extends StatelessWidget {
 
   _body(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(top: 16),
       color: colorConvert("#cb0930"),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           _text(),
           _pageView(),
@@ -42,6 +52,7 @@ class HomePage extends StatelessWidget {
 
   Container _pageView() {
     return Container(
+      margin: EdgeInsets.only(top: 20, bottom: 20),
       height: 301,
       child: PageView(
         children: [
@@ -88,7 +99,16 @@ class HomePage extends StatelessWidget {
     print("retorno: '$retorno'");
   }
 
-  _onClickToast() {}
+  _onClickToast() {
+    Fluttertoast.showToast(
+        msg: "This is Center Long Toast",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
 
   _onClickDialog(context) {
     showDialog(
@@ -156,5 +176,9 @@ class HomePage extends StatelessWidget {
         decorationStyle: TextDecorationStyle.wavy,
       ),
     );
+  }
+
+  void _onClickFab() {
+    print("Add");
   }
 }
