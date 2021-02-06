@@ -1,3 +1,9 @@
+import 'package:carros/pages/home_page.dart';
+import 'package:carros/pages/login_api.dart';
+import 'package:carros/pages/usuario.dart';
+import 'package:carros/utils/nav.dart';
+import 'package:carros/widgets/app_button.dart';
+import 'package:carros/widgets/app_text.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -37,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: EdgeInsets.all(16),
         child: ListView(
           children: [
-            _textFormField(
+            AppText(
               "Login",
               "Digite o login",
               controller: _tLogin,
@@ -47,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
               nextFocus: _focusSenha,
             ),
             SizedBox(height: 10),
-            _textFormField(
+            AppText(
               "Senha",
               "Digite a senha",
               password: true,
@@ -57,69 +63,33 @@ class _LoginPageState extends State<LoginPage> {
               focusNode: _focusSenha,
             ),
             SizedBox(height: 20),
-            _button("Login", _onClickLogin)
+            AppButton("Login", onPressed: _onClickLogin)
           ],
         ),
       ),
     );
   }
 
-  Container _button(String text, Function onPressed) {
-    return Container(
-      height: 46,
-      child: RaisedButton(
-        color: Colors.blue,
-        child: Text(
-          text,
-          style: TextStyle(color: Colors.white, fontSize: 22),
-        ),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
-  TextFormField _textFormField(
-    String label,
-    String hint, {
-    bool password = false,
-    TextEditingController controller,
-    FormFieldValidator<String> validator,
-    TextInputType keyboardType,
-    TextInputAction textInputAction,
-    FocusNode focusNode,
-    FocusNode nextFocus,
-  }) {
-    return TextFormField(
-      validator: validator,
-      keyboardType: keyboardType,
-      textInputAction: textInputAction,
-      focusNode: focusNode,
-      onFieldSubmitted: (String text) {
-        if (nextFocus != null) {
-          FocusScope.of(context).requestFocus(nextFocus);
-        }
-      },
-      controller: controller,
-      style: TextStyle(fontSize: 25, color: Colors.blue),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(fontSize: 25, color: Colors.grey),
-        hintText: hint,
-        hintStyle: TextStyle(fontSize: 16, color: Colors.red),
-      ),
-      obscureText: password,
-    );
-  }
-
-  void _onClickLogin() {
+  void _onClickLogin() async {
     if (!_formKey.currentState.validate()) {
       return;
     }
 
-    String l = _tLogin.text;
-    String s = _tSenha.text;
+    String login = _tLogin.text;
+    String senha = _tSenha.text;
 
-    print("Login: $l, senha: $s");
+    print("Login: $login, senha: $senha");
+
+    Usuario usuario = await LoginAPI.login(login, senha);
+
+    if (usuario != null) {
+
+      print(">>> $usuario");
+
+      push(context, HomePage());
+    } else {
+      print("Login incorreto");
+    }
   }
 
   String _validateLogin(String value) {

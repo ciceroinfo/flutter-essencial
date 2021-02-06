@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
           title: _title(),
           bottom: TabBar(
             tabs: [
-              Tab(text: "Tab 1"),
+              Tab(text: "Tab 0"),
               Tab(text: "Tab 2"),
               Tab(text: "Tab 3"),
             ],
@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+          child: Icon(Icons.star),
           onPressed: () {
             _onClickFab();
           },
@@ -157,7 +157,7 @@ class HomePage extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Olá Snack"),
       action: SnackBarAction(
-        textColor: Colors.yellow,
+        textColor: Colors.green,
         label: "OK",
         onPressed: () {
           print("OK Snack");
