@@ -1,7 +1,7 @@
 import 'package:carros/pages/api_response.dart';
-import 'package:carros/pages/home_page.dart';
-import 'package:carros/pages/login_api.dart';
-import 'package:carros/pages/usuario.dart';
+import 'package:carros/pages/carro/home_page.dart';
+import 'package:carros/pages/login/login_api.dart';
+import 'package:carros/pages/login/usuario.dart';
 import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/app_button.dart';
@@ -21,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   final _focusSenha = FocusNode();
+
+  bool _showProgress = false;
 
   @override
   void initState() {
@@ -65,7 +67,11 @@ class _LoginPageState extends State<LoginPage> {
               focusNode: _focusSenha,
             ),
             SizedBox(height: 20),
-            AppButton("Login", onPressed: _onClickLogin)
+            AppButton(
+              "Login",
+              onPressed: _onClickLogin,
+              showProgress: _showProgress,
+            )
           ],
         ),
       ),
@@ -82,16 +88,23 @@ class _LoginPageState extends State<LoginPage> {
 
     print("Login: $login, senha: $senha");
 
+    setState(() {
+      _showProgress = true;
+    });
+
     ApiResponse response = await LoginAPI.login(login, senha);
 
     if (response.ok) {
-
       print(">>> ${response.result}");
 
-      push(context, HomePage());
+      pushReplacement(context, HomePage());
     } else {
       alert(context, response.msg);
     }
+
+    setState(() {
+      _showProgress = false;
+    });
   }
 
   String _validateLogin(String value) {
