@@ -1,21 +1,33 @@
+import 'dart:convert' as convert;
+
 import 'package:carros/pages/carro/carro.dart';
+import 'package:carros/pages/login/usuario.dart';
+import 'package:http/http.dart' as http;
 
 class CarrosApi {
-  static List<Carro> getCarros() {
-    final carros = <Carro>[];
+  static Future<List<Carro>> getCarros(String tipo) async {
+    Usuario user = await Usuario.get();
 
-    carros.add(Carro(
-        nome: "Ferrari FF",
-        urlFoto:
-            "https://s3-sa-east-1.amazonaws.com/videos.livetouchdev.com.br/classicos/Chevrolet_Corvette.png"));
-    carros.add(Carro(
-        nome: "Koenigsegg UPDATE",
-        urlFoto:
-            "https://s3-sa-east-1.amazonaws.com/videos.livetouchdev.com.br/luxo/Koenigsegg_CCX.png"));
-    carros.add(Carro(
-        nome: "Lamborghini Reventon",
-        urlFoto:
-            "https://s3-sa-east-1.amazonaws.com/videos.livetouchdev.com.br/luxo/Lamborghini_Reventon.png"));
-    return carros;
+    var url =
+        'https://carros-springboot.herokuapp.com/api/v2/carros/tipo/$tipo';
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${user.token}"
+    };
+
+    print(url);
+
+    var response = await http.get(url, headers: headers);
+
+    List list = convert.json.decode(response.body);
+
+    return list.map<Carro>((e) => Carro.fromJson(e)).toList();
   }
+}
+
+class TipoCarro {
+  static final String classicos = "classicos";
+  static final String esportivos = "esportivos";
+  static final String luxo = "luxo";
 }
