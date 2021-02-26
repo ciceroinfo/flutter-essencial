@@ -1,7 +1,6 @@
 import 'package:carros/utils/prefs.dart';
 import 'dart:convert' as convert;
 
-
 class Usuario {
   int id;
   String login;
@@ -52,7 +51,7 @@ class Usuario {
 
   static Future<Usuario> get() async {
     String json = await Prefs.getString("user.prefs");
-    if(json.isEmpty) {
+    if (json.isEmpty) {
       return null;
     }
     Map map = convert.json.decode(json);
