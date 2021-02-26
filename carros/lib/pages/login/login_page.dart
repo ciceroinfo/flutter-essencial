@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carros/pages/api_response.dart';
 import 'package:carros/pages/carro/home_page.dart';
 import 'package:carros/pages/login/login_api.dart';
@@ -14,6 +16,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  final _streamController =  StreamController<bool>();
+
   final _tLogin = TextEditingController();
 
   final _tSenha = TextEditingController();
@@ -21,8 +26,6 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   final _focusSenha = FocusNode();
-
-  bool _showProgress = false;
 
   @override
   void initState() {
@@ -76,10 +79,16 @@ class _LoginPageState extends State<LoginPage> {
               focusNode: _focusSenha,
             ),
             SizedBox(height: 20),
-            AppButton(
-              "Login",
-              onPressed: _onClickLogin,
-              showProgress: _showProgress,
+            StreamBuilder<bool>(
+              stream: _streamController.stream,
+              initialData: false,
+              builder: (context, snapshot) {
+                return AppButton(
+                  "Login",
+                  onPressed: _onClickLogin,
+                  showProgress: snapshot.data,
+                );
+              }
             )
           ],
         ),
@@ -97,9 +106,7 @@ class _LoginPageState extends State<LoginPage> {
 
     print("Login: $login, senha: $senha");
 
-    setState(() {
-      _showProgress = true;
-    });
+   _streamController.add(true);
 
     ApiResponse response = await LoginAPI.login(login, senha);
 
@@ -111,9 +118,7 @@ class _LoginPageState extends State<LoginPage> {
       alert(context, response.msg);
     }
 
-    setState(() {
-      _showProgress = false;
-    });
+    _streamController.add(false);
   }
 
   String _validateLogin(String value) {
@@ -138,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
+    _streamController.close();
   }
 }
