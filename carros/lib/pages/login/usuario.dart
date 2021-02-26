@@ -1,7 +1,6 @@
 import 'package:carros/utils/prefs.dart';
 import 'dart:convert' as convert;
 
-import 'package:flutter/services.dart';
 
 class Usuario {
   int id;

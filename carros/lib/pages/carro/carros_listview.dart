@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:carros/pages/carro/carro_page.dart';
 import 'package:carros/pages/carro/carros_bloc.dart';
@@ -6,7 +5,6 @@ import 'package:carros/utils/nav.dart';
 import 'package:flutter/material.dart';
 
 import 'carro.dart';
-import 'carros_api.dart';
 
 class CarrosListView extends StatefulWidget {
   String tipo;
