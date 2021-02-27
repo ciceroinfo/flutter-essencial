@@ -1,12 +1,13 @@
 import 'package:carros/pages/carro/carro_page.dart';
 import 'package:carros/pages/carro/carros_bloc.dart';
 import 'package:carros/utils/nav.dart';
+import 'package:carros/utils/text_error.dart';
 import 'package:flutter/material.dart';
 
 import 'carro.dart';
 
 class CarrosListView extends StatefulWidget {
-  String tipo;
+  final String tipo;
 
   CarrosListView(this.tipo);
 
@@ -39,17 +40,7 @@ class _CarrosListViewState extends State<CarrosListView>
       stream: _bloc.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          print(snapshot.error);
-
-          return Center(
-            child: Text(
-              "Não foi possivel buscar os carros",
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 22,
-              ),
-            ),
-          );
+          return TextError("Não foi possivel buscar os carros");
         }
 
         if (!snapshot.hasData) {
