@@ -1,8 +1,7 @@
-
 import 'package:flutter/material.dart';
 
 class TextError extends StatelessWidget {
-  final  String msg;
+  final String msg;
 
   TextError(this.msg);
 
