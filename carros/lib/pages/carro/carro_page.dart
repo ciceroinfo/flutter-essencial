@@ -1,17 +1,32 @@
 import 'package:carros/pages/carro/carro.dart';
+import 'package:carros/pages/carro/loripsum_api.dart';
 import 'package:carros/utils/text.dart';
 import 'package:flutter/material.dart';
 
-class CarroPage extends StatelessWidget {
+class CarroPage extends StatefulWidget {
+
   final Carro carro;
 
   CarroPage(this.carro);
 
   @override
+  _CarroPageState createState() => _CarroPageState();
+}
+
+class _CarroPageState extends State<CarroPage> {
+  final _loripsumApiBloc = LoripsumBloc();
+
+  @override
+  void initState() {
+    super.initState();
+    _loripsumApiBloc.fetch();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(carro.nome),
+        title: Text(widget.carro.nome),
         actions: [
           IconButton(icon: Icon(Icons.place), onPressed: _onClickMap),
           IconButton(icon: Icon(Icons.videocam), onPressed: _onClickMap),
@@ -36,7 +51,7 @@ class CarroPage extends StatelessWidget {
       padding: EdgeInsets.all(16),
       child: ListView(
         children: [
-          Image.network(carro.urlFoto),
+          Image.network(widget.carro.urlFoto),
           _bloco1(),
           Divider(),
           _bloco2(),
@@ -52,8 +67,8 @@ class CarroPage extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            text(carro.nome, fontSize: 20, bold: true),
-            text(carro.tipo, fontSize: 16),
+            text(widget.carro.nome, fontSize: 20, bold: true),
+            text(widget.carro.tipo, fontSize: 16),
           ],
         ),
         Row(
@@ -98,15 +113,29 @@ class CarroPage extends StatelessWidget {
   void _onClickShare() {}
 
   _bloco2() {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        text(carro.descricao, fontSize: 16),
+        text(widget.carro.descricao, fontSize: 16),
         SizedBox(height: 20),
-        text(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            fontSize: 14),
+        StreamBuilder<String>(
+          stream: _loripsumApiBloc.stream,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            return text(snapshot.data, fontSize: 14);
+          },
+        ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _loripsumApiBloc.dispose();
   }
 }
