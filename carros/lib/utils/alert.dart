@@ -11,7 +11,7 @@ alert(BuildContext context, String msg) {
             title: Text("Carros"),
             content: Text(msg),
             actions: [
-              FlatButton(
+              TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },

@@ -86,11 +86,11 @@ class _CarrosListViewState extends State<CarrosListView>
                         data: ButtonBarTheme.of(context),
                         child: ButtonBar(
                           children: <Widget>[
-                            FlatButton(
+                            TextButton(
                               child: const Text('DETALHES'),
                               onPressed: () => _onClickCarro(c),
                             ),
-                            FlatButton(
+                            TextButton(
                               child: const Text('SHARE'),
                               onPressed: () {
                                 /* ... */
